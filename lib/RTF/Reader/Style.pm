@@ -4,8 +4,8 @@ package RTF::Reader::Style;
 	use strict;
 	use warnings;
 
-	my @parprops = qw( hyphpar intbl itap keep keepn level noline nowidctlpar widctlpar outlinelevel pagebb sbys qc qj ql qr qd faauto fahang facenter faroman favar fafixed fi cufi li lin culi ri rin curi adjustright sb sa sbauto saauto lisb lisa sl slmult nosnaplinegrid subdocument rtlpar ltrpar nocwrap nowwrap nooverflow aspalpha aspnum collapsed );
-	my @charprops = qw(f cb cchs cf charscalex cs cgrid g gcw gridtbl deleted dn embo expnd expndtw fittext fs i impr kerning langfe langfenp lang langnp ltrch rtlch noproof nosupersub nosectexpand outl rtlch scaps shad strike striked sub super ul ulc uld uldash uldashd uldashdd uldb ulhwave ulldash ulnone ulth ulthd ulthdash ulthdashd ulthdashdd ulthldash ululdbwave ulw ulwave up v webhidden);
+	my @parprops = qw(s f hyphpar intbl itap keep keepn level noline nowidctlpar widctlpar outlinelevel pagebb sbys qc qj ql qr qd faauto fahang facenter faroman favar fafixed fi cufi li lin culi ri rin curi adjustright sb sa sbauto saauto lisb lisa sl slmult nosnaplinegrid subdocument rtlpar ltrpar nocwrap nowwrap nooverflow aspalpha aspnum collapsed );
+	my @charprops = qw(f b cb cchs cf charscalex cs cgrid g gcw gridtbl deleted dn embo expnd expndtw fittext fs i impr kerning langfe langfenp lang langnp ltrch rtlch noproof nosupersub nosectexpand outl rtlch scaps shad strike striked sub super ul ulc uld uldash uldashd uldashdd uldb ulhwave ulldash ulnone ulth ulthd ulthdash ulthdashd ulthdashdd ulthldash ululdbwave ulw ulwave up v webhidden);
 
 =head1 NAME
 
@@ -132,6 +132,8 @@ sub number {
 	my $self = shift;
 	
 	$self->{number} = $_[0] if $_[0];
+	
+	$self->{ attributes }->{'s'} = $self->{ number };
 	
 	return $self->{number};
 

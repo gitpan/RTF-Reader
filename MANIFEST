@@ -1,7 +1,6 @@
 eg/dump_headers.pl
 eg/dump_text.pl
 eg/test.rtf
-eg/spec.txt
 lib/RTF/Reader/Handlers/Colours.pm
 lib/RTF/Reader/Handlers/Escapes.pm
 lib/RTF/Reader/Handlers/Fonts.pm
@@ -15,3 +14,4 @@ lib/RTF/Reader/Interface/asText.pm
 lib/RTF/Reader.pm
 Makefile.PL
 MANIFEST
+CHANGES

@@ -10,7 +10,7 @@ Gives you a simple toolset for doing what you want with RTF
 
 =head1 OVERVIEW
 
-B<THIS MODULE IS AT BEST BETA, AT WORST, STILL IN 'PLANNING'. The interface may change, the docs are almost certainly slighty out of date...>
+B<THIS MODULE IS AT BEST BETA, AT WORST, STILL IN 'PLANNING'. The interface may change, the docs are almost certainly slighty out of date...>. The latest version of all this is in CVS - use that instead where possible. Details at http://rtf.perl.org/...
 
 RTF::Reader is a base-class that opens up an API for you to
 use to convert RTF into other formats. The basic model is that
@@ -37,9 +37,10 @@ get a better idea of how to do this.
 	use strict;
 	use warnings;
 	use Carp;
+	use Data::Dumper;
 
 	use vars qw($VERSION);
-	$VERSION = '0.01_1';
+	$VERSION = '0.01_2';
 
 	our %handler      = %RTF::Reader::Handlers::handler;
 	
@@ -105,6 +106,8 @@ sub new {
 		colors    => [],
 		buffer    => '',
 		info      => {},
+		pre_handlers  => {},
+		post_handlers => {},
 	
 	};
 
@@ -114,6 +117,21 @@ sub new {
 	$self->{context}->reader( $self );
 	
 	return $self;
+
+}
+
+=head2 add_events
+
+Accepts a Hash::Diff::Dispatch object...
+
+=cut
+
+sub add_events {
+
+	my $self = shift;
+	my $events = shift;
+	
+	$self->{_event_hash} = $events;
 
 }
 
@@ -155,12 +173,39 @@ sub process {
 
 		} elsif ( $type eq 'control' ) {
 	
+			if ( $self->{ pre_handlers }->{ $token } ) {
+			
+				$self->{ pre_handlers }->{ $token }( $self->{context}, $argument );
+			
+			}
+	
 			if ( $handler{ $token } ) {
 			
 				$self->{last_control} = $token;
 	
 				$handler{$token}( $self->{context}, $argument );
 		
+			}
+			
+			if ( $self->{ post_handlers }->{ $token } ) {
+			
+				$self->{ post_handlers }->{ $token }( $self->{context}, $argument );
+			
+			}
+			
+			if ( $self->{_event_hash} && $handler{ $token }) {
+		
+		
+				unless ( ( $self->{context}->context eq 'style sheet' ) ||
+					( $self->{context}->context eq 'style definiton' )) {
+		
+					$self->{_event_hash}->update(
+						$self->{context}->{style}->{attributes}
+					);
+					
+				}
+					print Dumper( $self->{context}->{style}->{attributes} );
+				
 			}
 	
 		} elsif ( $type eq 'group' ) {
@@ -171,7 +216,21 @@ sub process {
 
 			} else {
 			
-				$self->{context} = $self->{context}->destroy
+				$self->{context} = $self->{context}->destroy;
+				
+				if ( $self->{_event_hash} ) {
+		
+					unless ( ( $self->{context}->context eq 'style sheet' ) ||
+						( $self->{context}->context eq 'style definiton' )) {
+		
+						$self->{_event_hash}->update(
+							$self->{context}->{style}->{attributes}
+						);
+					
+					}
+					#print Dumper( $self->{context}->{style}->{attributes} );
+				
+				}
 				
 			}
 

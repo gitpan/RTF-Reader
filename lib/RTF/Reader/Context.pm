@@ -35,6 +35,7 @@ sub new {
 		$child->{_PARENT} = $self;
 		$child->{_READER} = $self->{_READER};
 		$child->{_SHOULD_BUFFER} = $self->{_SHOULD_BUFFER};
+		$child->{_UNICODE_COUNT} = $self->{_UNICODE_COUNT};
 		$child->{_INHERITED_ON_DESTROY} = $self->{_INHERITED_ON_DESTROY};
 		$child->{attribute} = $self->{attribute};
 		$child->context( $self->context );
@@ -72,6 +73,21 @@ sub toggle_buffering {
 
 }
 
+=head2 unicode_count
+
+Accessor ... set or get the current number of characters included in
+the ANSI representation of a Unicode character...
+
+=cut
+
+sub unicode_count {
+
+	my $self = shift;
+	$self->{_UNICODE_COUNT} = shift if @_;
+	return $self->{_UNICODE_COUNT};
+
+}
+
 =head2 add_to_text
 
 Adds to the text buffer
@@ -83,6 +99,25 @@ sub add_to_text {
 	my $self = shift;
 	
 	my $text = shift;
+	
+	# Do we need to discard some characters?
+	if ( $self->{_CUT_CHARACTERS} ) {
+	
+		# print $self->{_CUT_CHARACTERS} . " to cut\n";
+	
+		if ( length( $text ) < $self->{_CUT_CHARACTERS} ) {
+		
+			$self->{_CUT_CHARACTERS} -= length( $text );
+			return;
+		
+		} else {
+		
+			$text = substr( $text, $self->{_CUT_CHARACTERS} );
+			$self->{_CUT_CHARACTERS} = 0;
+		
+		}
+	
+	}
 		
 	if ( $self->{_SHOULD_BUFFER} ) {
 		

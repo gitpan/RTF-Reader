@@ -51,7 +51,7 @@ f => sub {
 		);
 
 	} else {
-	
+		
 		my $self = shift;
 		
 		$self->{style}->{attributes}->{f} = $number;

@@ -51,6 +51,8 @@ package RTF::Reader::Handlers;
 			$self->context( 'embedded picture' );
 
 		},
+		
+
 
 	
 	);

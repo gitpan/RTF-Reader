@@ -37,6 +37,11 @@ package RTF::Reader::Handlers::Escapes;
 
     },
 
+		'rquote' => sub { my $self = shift; treat_as_text( $self->reader, "'" ); },
+		'lquote' => sub { my $self = shift; treat_as_text( $self->reader, "'" ); },
+		'rdblquote' => sub { my $self = shift; treat_as_text( $self->reader, '"' ); },
+		'ldblquote' => sub { my $self = shift; treat_as_text( $self->reader, '"' ); },
+
 		'\\' => sub {
 
 			my $self = shift;
@@ -52,7 +57,34 @@ package RTF::Reader::Handlers::Escapes;
 			
 			treat_as_text( $self->reader, chr(hex($code)) );
 		
-		}
+		},
+		
+		uc => sub {
+		
+			my $self = shift;
+			
+			$self->unicode_count( shift );
+			
+		},
+		
+		u => sub {
+		
+			my $self = shift;
+			my $argument = shift;
+			
+			$argument += ( 32767 * 2) if $argument < 0;
+			
+			my $char = chr(  $argument );
+			
+			treat_as_text( $self->reader,
+			
+				$char
+			
+			);
+			
+			$self->{_CUT_CHARACTERS} = $self->unicode_count() || 1;
+
+		},
 
 	);
 	
