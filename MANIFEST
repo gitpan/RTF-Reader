@@ -1,0 +1,17 @@
+eg/dump_headers.pl
+eg/dump_text.pl
+eg/test.rtf
+eg/spec.txt
+lib/RTF/Reader/Handlers/Colours.pm
+lib/RTF/Reader/Handlers/Escapes.pm
+lib/RTF/Reader/Handlers/Fonts.pm
+lib/RTF/Reader/Handlers/Info.pm
+lib/RTF/Reader/Handlers/Stylesheet.pm
+lib/RTF/Reader/Context.pm
+lib/RTF/Reader/Font.pm
+lib/RTF/Reader/Handlers.pm
+lib/RTF/Reader/Style.pm
+lib/RTF/Reader/Interface/asText.pm
+lib/RTF/Reader.pm
+Makefile.PL
+MANIFEST
